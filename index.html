@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head id="j_idt2"><link type="text/css" rel="stylesheet" href="/javax.faces.resource/theme.css.xhtml?ln=primefaces-aristo" /><script type="text/javascript" src="/javax.faces.resource/jsf.js.xhtml;jsessionid=31-cgU55qRNKJn2q9c1j8Isg?ln=javax.faces"></script><script type="text/javascript">if(window.PrimeFaces){PrimeFaces.settings.locale='en_US';}</script>
+
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+
+	<title>Painel Pré-Natal - SISAB</title>
+
+	<!-- Bootstrap 3.3.4 -->
+	<link href="/resource/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<!-- Font Awesome Icons -->
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<!-- Ionicons -->
+	<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+	<!-- Theme style -->
+	<link href="/resource/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+	<!-- AdminLTE Skins. -->
+	<link href="/resource/css/alteraTemplate.css" rel="stylesheet" type="text/css" />
+	<link href="/resource/css/skins/skin-blue.css" rel="stylesheet" type="text/css" />
+
+	<!-- jQuery 2.1.4 -->
+	<script src="/resource/js/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+	<!-- Bootstrap 3.3.2 JS -->
+	<script src="/resource/js/bootstrap.min.js" type="text/javascript"></script>
+    
+    <style>
+      .info-box-icon {
+        font-size: 50px;
+      }
+      .info-box-number {
+        font-size: 28px;
+        font-weight: bold;
+      }
+       .info-box-content .progress-description {
+        font-size: 14px;
+      }
+    </style>
+
+	<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+</head><body class="skin-blue">
+	<div class="wrapper">
+		<div class="content-wrapper" style="margin-left: 0;">
+			<section class="content-header">
+                <h1>Painel de Pré-Natal <small>Município de Parauapebas - PA</small></h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Início</a></li>
+                    <li class="active">Painel Pré-natal</li>
+                </ol>
+			</section>
+
+			<section class="content">
+                <!-- Filtros Simplificados -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Filtros</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Competência:</label>
+                                    <select class="form-control">
+                                        <option value="202404">ABR/2024</option>
+                                        <option value="202403">MAR/2024</option>
+                                        <option value="202402">FEV/2024</option>
+                                        <option value="202401">JAN/2024</option>
+                                        <option value="202312" selected>DEZ/2023</option> <!-- Exemplo de competência selecionada -->
+                                        <option value="202311">NOV/2023</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label> </label>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa fa-search"></i> Visualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards de Indicadores -->
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box bg-aqua">
+                            <span class="info-box-icon"><i class="fa fa-user-plus"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Primeiro Atendimento</span>
+                                <span class="info-box-number">421</span>
+                                <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                                <span class="progress-description">Total de gestantes com 1º consulta.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="fa fa-calendar-check-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Atendimento até 12ª Semana</span>
+                                <span class="info-box-number">358</span>
+                                <div class="progress"><div class="progress-bar" style="width: 85%"></div></div>
+                                <span class="progress-description">85% do total realizaram no prazo.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box bg-yellow">
+                            <span class="info-box-icon"><i class="fa fa-flask"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Exames Solicitados</span>
+                                <span class="info-box-number">399</span>
+                                <div class="progress"><div class="progress-bar" style="width: 95%"></div></div>
+                                <span class="progress-description">95% com exames (Sífilis e HIV).</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box bg-red">
+                            <span class="info-box-icon"><i class="fa fa-heartbeat"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Atend. Odontológico</span>
+                                <span class="info-box-number">295</span>
+                                <div class="progress"><div class="progress-bar" style="width: 70%"></div></div>
+                                <span class="progress-description">70% realizaram consulta odontológica.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabela de Detalhes por Unidade de Saúde -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Detalhes por Unidade de Saúde (CNES)</h3>
+                            </div>
+                            <div class="box-body table-responsive">
+                                <table id="detalhes-ubs" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Unidade de Saúde (CNES)</th>
+                                            <th>1º Atendimento</th>
+                                            <th>Até 12ª Sem. (%)</th>
+                                            <th>Exames Solicitados (%)</th>
+                                            <th>Atend. Odonto. (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>UBS CIDADE JARDIM (2578901)</td>
+                                            <td>55</td>
+                                            <td>48 (87%)</td>
+                                            <td>52 (95%)</td>
+                                            <td>40 (73%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UBS TROPICAL (2578910)</td>
+                                            <td>48</td>
+                                            <td>40 (83%)</td>
+                                            <td>46 (96%)</td>
+                                            <td>31 (65%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UBS Liberdade I (2578928)</td>
+                                            <td>62</td>
+                                            <td>55 (89%)</td>
+                                            <td>58 (94%)</td>
+                                            <td>45 (73%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UBS Minérios (3014562)</td>
+                                            <td>35</td>
+                                            <td>28 (80%)</td>
+                                            <td>33 (94%)</td>
+                                            <td>22 (63%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UBS Palmares Sul (3219874)</td>
+                                            <td>41</td>
+                                            <td>36 (88%)</td>
+                                            <td>39 (95%)</td>
+                                            <td>30 (73%)</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Total Municipal</th>
+                                            <th>421</th>
+                                            <th>358 (85%)</th>
+                                            <th>399 (95%)</th>
+                                            <th>295 (70%)</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+			</section>
+		</div>
+	</div></body>
+
+</html>
