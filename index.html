@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="120">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slot Games - PG Soft e Pragmatic Play</title>
+  <title>Slot Games - Provedores e RTP</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-    h1 { text-align: center; color: #2c3e50; }
-    h2 { margin-top: 30px; color: #2c3e50; text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background-color: #fafafa; }
+    h1, h2 { text-align: center; color: #2c3e50; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f0f0f0; }
     tr:nth-child(even) { background-color: #f9f9f9; }
     tr:hover { background-color: #f1f1f1; }
     .table-container { overflow-x: auto; }
@@ -18,61 +17,64 @@
       body { margin: 10px; }
       th, td { font-size: 14px; }
     }
+    select { padding: 8px; font-size: 16px; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h1>Jogos de Slots Populares</h1>
+  <h1>Jogos de Slots Populares por Provedor</h1><label for="providerFilter">Filtrar por Provedor:</label> <select id="providerFilter" onchange="filterTables()"> <option value="all">Todos</option> <option value="pg">PG Soft</option> <option value="pragmatic">Pragmatic Play</option> <option value="novo">Novo Provedor</option> </select>
 
-  <h2>PG Soft</h2>
   <div class="table-container">
-    <table>
-      <thead>
-        <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Mahjong Ways 2</td>
-          <td>96,95</td>
-          <td>Tema Mahjong chinês; volatilidade média-alta; multiplicadores progressivos</td>
-        </tr>
-        <tr>
-          <td>Treasures of Aztec</td>
-          <td>96,71</td>
-          <td>Cascata de símbolos com multiplicadores; alta volatilidade</td>
-        </tr>
-        <tr>
-          <td>Fortune Tiger</td>
-          <td>96,81</td>
-          <td>Slot 3x3 com respins instantâneos; volatilidade média; multiplicadores aleatórios</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+    <div class="provider-table" data-provider="pg">
+      <h2>PG Soft</h2>
+      <table>
+        <thead>
+          <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mahjong Ways 2</td><td>96,95</td><td>Multiplicadores progressivos</td></tr>
+          <tr><td>Treasures of Aztec</td><td>96,71</td><td>Alta volatilidade</td></tr>
+          <tr><td>Fortune Tiger</td><td>96,81</td><td>Respins instantâneos</td></tr>
+        </tbody>
+      </table>
+    </div><div class="provider-table" data-provider="pragmatic">
   <h2>Pragmatic Play</h2>
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Gates of Olympus</td>
-          <td>96,50</td>
-          <td>Mitologia grega; grid 6x5 “Pay Anywhere”; volatilidade alta; multiplicadores de Zeus</td>
-        </tr>
-        <tr>
-          <td>Sugar Rush</td>
-          <td>96,50</td>
-          <td>Tema doces; pagamentos em agrupamentos (cluster pays); volatilidade alta; multiplicadores pegajosos</td>
-        </tr>
-        <tr>
-          <td>The Dog House Megaways</td>
-          <td>96,55</td>
-          <td>Versão Megaways (117.649 maneiras de ganhar); tema cães; wilds fixos ou caindo; volatilidade alta</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</body>
+  <table>
+    <thead>
+      <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Gates of Olympus</td><td>96,50</td><td>Multiplicadores de Zeus</td></tr>
+      <tr><td>Sugar Rush</td><td>96,50</td><td>Multiplicadores pegajosos</td></tr>
+      <tr><td>The Dog House Megaways</td><td>96,55</td><td>Wilds fixos ou caindo</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="provider-table" data-provider="novo">
+  <h2>Novo Provedor</h2>
+  <table>
+    <thead>
+      <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Fire Joker</td><td>96,23</td><td>Slot clássico 3x3 com re-spin</td></tr>
+      <tr><td>Book of Dead</td><td>96,21</td><td>Alta volatilidade, tema egípcio</td></tr>
+      <tr><td>Reactoonz</td><td>96,51</td><td>Slot com cascata e símbolos especiais</td></tr>
+    </tbody>
+  </table>
+</div>
+
+  </div>  <script>
+    function filterTables() {
+      const selected = document.getElementById("providerFilter").value;
+      const tables = document.querySelectorAll(".provider-table");
+      tables.forEach(table => {
+        if (selected === "all" || table.dataset.provider === selected) {
+          table.style.display = "block";
+        } else {
+          table.style.display = "none";
+        }
+      });
+    }
+  </script></body>
 </html>
