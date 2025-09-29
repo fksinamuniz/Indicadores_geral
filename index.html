@@ -1,80 +1,481 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="120">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slot Games - Provedores e RTP</title>
+  <title>Painel de Saúde Parauapebas - Indicadores Corrigidos</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background-color: #fafafa; }
-    h1, h2 { text-align: center; color: #2c3e50; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-    th { background-color: #f0f0f0; }
-    tr:nth-child(even) { background-color: #f9f9f9; }
-    tr:hover { background-color: #f1f1f1; }
-    .table-container { overflow-x: auto; }
-    @media (max-width: 600px) {
-      body { margin: 10px; }
-      th, td { font-size: 14px; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
     }
-    select { padding: 8px; font-size: 16px; margin-bottom: 20px; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid #e5e7eb;
+      padding: 32px 0 0 0;
+      box-sizing: border-box;
+    }
+    .sidebar .logo {
+      margin: 0 0 12px 32px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #2563eb;
+    }
+    .sidebar .subtitle {
+      margin-left: 32px;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+    .sidebar .menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      color: #374151;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      width: 90%;
+      margin-left: 5%;
+      transition: background 0.15s, color 0.15s;
+      font-weight: 500;
+    }
+    .sidebar .menu-btn.active {
+      background: #eaf1ff;
+      color: #2563eb;
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(37,99,235,0.09);
+    }
+    .sidebar .menu-btn .icon {
+      font-size: 18px;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .main-panel {
+      background: #f1f5fb;
+      margin: 24px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 24px;
+    }
+    .panel-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 2px;
+    }
+    .panel-desc {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filters select, .filters input[type="search"], .filters input[type="date"] {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      font-size: 15px;
+      background: #fff;
+      color: #374151;
+    }
+    .filters button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .filters button:hover {
+      background: #1e40af;
+    }
+    .cards-row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .indicator-card {
+      flex: 1 1 240px;
+      min-width: 240px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      padding: 22px 28px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 10px;
+    }
+    .indicator-card.blue { border-left: 5px solid #2563eb; background: #f5faff; }
+    .indicator-card.yellow { border-left: 5px solid #f59e42; background: #fffbea; }
+    .indicator-card.green { border-left: 5px solid #22c55e; background: #f3fcf7; }
+    .indicator-card.purple { border-left: 5px solid #8b5cf6; background: #f3e8ff; }
+    .indicator-card.teal { border-left: 5px solid #14b8a6; background: #eafaf7; }
+    .indicator-card .icon {
+      font-size: 28px;
+      color: inherit;
+      margin-bottom: 0;
+    }
+    .indicator-info {
+      flex: 1;
+    }
+    .indicator-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .indicator-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    .indicator-sub {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .indicator-trend {
+      font-size: 13px;
+      font-weight: 600;
+      color: #22c55e;
+      display: flex; align-items: center; gap:4px;
+    }
+    .indicator-trend.negative { color: #dc2626; }
+    .chart-section {
+      background: #fff;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #334155;
+    }
+    @media (max-width:980px) {
+      .cards-row { flex-direction: column; }
+      .indicator-card { min-width: unset; }
+      .sidebar { width: 100px; }
+      .sidebar .logo, .sidebar .subtitle, .sidebar .menu-btn span { display:none;}
+      .sidebar .menu-btn { justify-content:center;}
+      .filters { flex-direction:column; align-items:stretch;}
+    }
   </style>
 </head>
 <body>
-  <h1>Jogos de Slots Populares por Provedor</h1><label for="providerFilter">Filtrar por Provedor:</label> <select id="providerFilter" onchange="filterTables()"> <option value="all">Todos</option> <option value="pg">PG Soft</option> <option value="pragmatic">Pragmatic Play</option> <option value="novo">Novo Provedor</option> </select>
-
-  <div class="table-container">
-    <div class="provider-table" data-provider="pg">
-      <h2>PG Soft</h2>
-      <table>
-        <thead>
-          <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Mahjong Ways 2</td><td>96,95</td><td>Multiplicadores progressivos</td></tr>
-          <tr><td>Treasures of Aztec</td><td>96,71</td><td>Alta volatilidade</td></tr>
-          <tr><td>Fortune Tiger</td><td>96,81</td><td>Respins instantâneos</td></tr>
-        </tbody>
-      </table>
-    </div><div class="provider-table" data-provider="pragmatic">
-  <h2>Pragmatic Play</h2>
-  <table>
-    <thead>
-      <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Gates of Olympus</td><td>96,50</td><td>Multiplicadores de Zeus</td></tr>
-      <tr><td>Sugar Rush</td><td>96,50</td><td>Multiplicadores pegajosos</td></tr>
-      <tr><td>The Dog House Megaways</td><td>96,55</td><td>Wilds fixos ou caindo</td></tr>
-    </tbody>
-  </table>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="logo">🩺 Painel de Saúde</div>
+    <div class="subtitle">Parauapebas - PA</div>
+    <ul id="abas">
+      <li><button class="menu-btn active" data-aba="visao-geral"><span class="icon">📊</span> Visão Geral</button></li>
+      <li><button class="menu-btn" data-aba="primaria"><span class="icon">🩹</span> Atenção Primária</button></li>
+      <li><button class="menu-btn" data-aba="especializada"><span class="icon">🩺</span> Atenção Especializada</button></li>
+      <li><button class="menu-btn" data-aba="complexidade"><span class="icon">🏥</span> Média/Alta Complexidade</button></li>
+      <li><button class="menu-btn" data-aba="redes"><span class="icon">🔗</span> Redes / Integração</button></li>
+    </ul>
+  </nav>
+  <main class="content">
+    <div class="topbar">
+      <div class="title">Sistema Municipal de Saúde de Parauapebas</div>
+      <div class="subtitle">Monitoramento e análise de indicadores de saúde</div>
+    </div>
+    <section class="main-panel">
+      <div class="panel-title" id="panel-title">Indicadores-Chave de Performance</div>
+      <div class="panel-desc" id="panel-desc">Principais métricas do sistema de saúde municipal</div>
+      <div class="filters">
+        <select id="categoria-filtro" onchange="applyFilters()">
+          <option value="">Todas as Categorias</option>
+          <option value="primaria">Atenção Primária</option>
+          <option value="especializada">Atenção Especializada</option>
+          <option value="complexidade">Média/Alta Complexidade</option>
+          <option value="redes">Redes / Integração</option>
+        </select>
+        <input type="search" id="indicador-filtro" placeholder="Buscar indicador..." oninput="applyFilters()" />
+        <select id="unidade-filtro" onchange="applyFilters()">
+          <option value="">Todas as Unidades</option>
+          <option value="UBS Centro">UBS Centro</option>
+          <option value="UBS Sul">UBS Sul</option>
+          <option value="Ambulatório">Ambulatório</option>
+          <option value="Hospital Municipal">Hospital Municipal</option>
+          <option value="CAPS">CAPS</option>
+          <option value="Rede Psicossocial">Rede Psicossocial</option>
+          <option value="SAMU">SAMU</option>
+        </select>
+        <select id="tipo-valor-filtro" onchange="applyFilters()">
+          <option value="">Todos os Tipos</option>
+          <option value="absoluto">Absoluto</option>
+          <option value="percentual">Percentual</option>
+        </select>
+        <input type="date" id="start-date" />
+        <input type="date" id="end-date" />
+        <button onclick="applyFilters()">Filtrar</button>
+      </div>
+      <div class="cards-row" id="cards">
+        <!-- Cards dinâmicos -->
+      </div>
+      <div class="chart-section">
+        <div class="chart-title">Série Histórica do Indicador Selecionado</div>
+        <canvas id="historicalChart"></canvas>
+      </div>
+    </section>
+  </main>
 </div>
+<script>
+// Indicadores simulados EXPANDIDOS
+const indicadoresHistorico = [
+  // Visão Geral (principais)
+  { categoria: "visao-geral", indicador: "Cobertura ESF", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-01-01", valor: 86.2, trend: 1.0 },
+  { categoria: "visao-geral", indicador: "Tempo Espera Especializada", unidade: "Ambulatório", tipoValor: "absoluto", data: "2025-01-01", valor: 27, trend: -3.0 },
+  { categoria: "visao-geral", indicador: "RAPS Cobertura", unidade: "Rede Psicossocial", tipoValor: "percentual", data: "2025-01-01", valor: 97, trend: 2.0 },
+  { categoria: "visao-geral", indicador: "Mortalidade Materna", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 1, trend: -100 },
 
-<div class="provider-table" data-provider="novo">
-  <h2>Novo Provedor</h2>
-  <table>
-    <thead>
-      <tr><th>Jogo</th><th>RTP (%)</th><th>Observação</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Fire Joker</td><td>96,23</td><td>Slot clássico 3x3 com re-spin</td></tr>
-      <tr><td>Book of Dead</td><td>96,21</td><td>Alta volatilidade, tema egípcio</td></tr>
-      <tr><td>Reactoonz</td><td>96,51</td><td>Slot com cascata e símbolos especiais</td></tr>
-    </tbody>
-  </table>
-</div>
+  // Atenção Primária
+  { categoria: "primaria", indicador: "Cobertura ESF", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-01-01", valor: 86.2, trend: 1.0 },
+  { categoria: "primaria", indicador: "Cobertura ESF", unidade: "UBS Sul", tipoValor: "percentual", data: "2025-01-01", valor: 84.8, trend: 1.2 },
+  { categoria: "primaria", indicador: "Cobertura Vacinal", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-01-01", valor: 92.1, trend: 0.5 },
+  { categoria: "primaria", indicador: "Consultas Médicas", unidade: "UBS Centro", tipoValor: "absoluto", data: "2025-01-01", valor: 1542, trend: 2.5 },
+  { categoria: "primaria", indicador: "Consultas Enfermagem", unidade: "UBS Sul", tipoValor: "absoluto", data: "2025-01-01", valor: 874, trend: 1.8 },
+  { categoria: "primaria", indicador: "Pré-natal", unidade: "UBS Sul", tipoValor: "absoluto", data: "2025-01-01", valor: 123, trend: 1.2 },
+  { categoria: "primaria", indicador: "Hipertensos Controlados", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-01-01", valor: 78.5, trend: -1.2 },
+  { categoria: "primaria", indicador: "Diabéticos Controlados", unidade: "UBS Sul", tipoValor: "percentual", data: "2025-01-01", valor: 82.1, trend: 0.8 },
+  { categoria: "primaria", indicador: "Crianças Acompanhadas", unidade: "UBS Centro", tipoValor: "absoluto", data: "2025-01-01", valor: 321, trend: 1.5 },
 
-  </div>  <script>
-    function filterTables() {
-      const selected = document.getElementById("providerFilter").value;
-      const tables = document.querySelectorAll(".provider-table");
-      tables.forEach(table => {
-        if (selected === "all" || table.dataset.provider === selected) {
-          table.style.display = "block";
-        } else {
-          table.style.display = "none";
-        }
-      });
+  // Atenção Especializada
+  { categoria: "especializada", indicador: "Tempo Espera Especializada", unidade: "Ambulatório", tipoValor: "absoluto", data: "2025-01-01", valor: 27, trend: -3.0 },
+  { categoria: "especializada", indicador: "Tempo Espera Especializada", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 32, trend: -2.2 },
+  { categoria: "especializada", indicador: "Consultas Cardiologia", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 145, trend: 5.4 },
+  { categoria: "especializada", indicador: "Exames Raio-X", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 254, trend: 3.2 },
+  { categoria: "especializada", indicador: "Exames Ultrassom", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 194, trend: 2.9 },
+  { categoria: "especializada", indicador: "Cirurgias Eletivas", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 41, trend: 0.9 },
+  { categoria: "especializada", indicador: "Reinternações", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-01-01", valor: 8.7, trend: -0.3 },
+
+  // Média/Alta Complexidade
+  { categoria: "complexidade", indicador: "Taxa Ocupação Leitos", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-01-01", valor: 76.8, trend: -2.3 },
+  { categoria: "complexidade", indicador: "Tempo Médio Internação", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 4.2, trend: 0.1 },
+  { categoria: "complexidade", indicador: "Tempo Médio Internação", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-02-01", valor: 4.0, trend: -0.2 },
+
+  // Redes / Integração
+  { categoria: "redes", indicador: "RAPS Cobertura", unidade: "Rede Psicossocial", tipoValor: "percentual", data: "2025-01-01", valor: 97, trend: 2.0 },
+  { categoria: "redes", indicador: "CAPS Atendimentos", unidade: "CAPS", tipoValor: "absoluto", data: "2025-01-01", valor: 78, trend: 1.5 },
+  { categoria: "redes", indicador: "Tempo Resposta SAMU", unidade: "SAMU", tipoValor: "absoluto", data: "2025-01-01", valor: 8.5, trend: -0.2 },
+  { categoria: "redes", indicador: "Mortalidade Materna", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 1, trend: -100 },
+  { categoria: "redes", indicador: "Mortalidade Infantil", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-01-01", valor: 2, trend: -0.4 },
+  { categoria: "redes", indicador: "Partos Normais", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-01-01", valor: 68.4, trend: 2.8 },
+  { categoria: "redes", indicador: "Partos Cesárea", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-01-01", valor: 31.6, trend: -2.8 },
+
+  // Meses seguintes para histórico e gráficos (exemplo de evolução)
+  { categoria: "primaria", indicador: "Cobertura ESF", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-02-01", valor: 87.3, trend: 1.1 },
+  { categoria: "primaria", indicador: "Cobertura Vacinal", unidade: "UBS Centro", tipoValor: "percentual", data: "2025-02-01", valor: 93.2, trend: 1.1 },
+  { categoria: "especializada", indicador: "Consultas Cardiologia", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-02-01", valor: 153, trend: 8.0 },
+  { categoria: "primaria", indicador: "Consultas Médicas", unidade: "UBS Centro", tipoValor: "absoluto", data: "2025-02-01", valor: 1590, trend: 3.1 },
+  { categoria: "redes", indicador: "CAPS Atendimentos", unidade: "CAPS", tipoValor: "absoluto", data: "2025-02-01", valor: 81, trend: 3.8 },
+  { categoria: "redes", indicador: "Tempo Resposta SAMU", unidade: "SAMU", tipoValor: "absoluto", data: "2025-02-01", valor: 8.3, trend: -0.2 },
+  { categoria: "redes", indicador: "Mortalidade Materna", unidade: "Hospital Municipal", tipoValor: "absoluto", data: "2025-02-01", valor: 0, trend: -100 },
+  { categoria: "redes", indicador: "Partos Normais", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-02-01", valor: 69.2, trend: 0.8 },
+  { categoria: "redes", indicador: "Partos Cesárea", unidade: "Hospital Municipal", tipoValor: "percentual", data: "2025-02-01", valor: 30.8, trend: -0.8 }
+];
+
+// Funções de cor/ícone para expandir novos indicadores
+function corCard(indicador) {
+  if (/ESF|Taxa Ocupação/.test(indicador)) return "blue";
+  if (/Vacinal|RAPS|Hipertensos|Diabéticos|Partos Normais/.test(indicador)) return "green";
+  if (/Tempo|Tempo Médio|Pré-natal|Tempo Resposta/.test(indicador)) return "yellow";
+  if (/Consultas|CAPS|Exames/.test(indicador)) return "purple";
+  if (/Mortalidade|Partos Cesárea/.test(indicador)) return "teal";
+  return "green";
+}
+function iconeCard(indicador) {
+  if (/ESF/.test(indicador)) return "👥";
+  if (/Vacinal/.test(indicador)) return "💉";
+  if (/Taxa Ocupação/.test(indicador)) return "🏥";
+  if (/Tempo|Tempo Médio|Tempo Resposta/.test(indicador)) return "🕒";
+  if (/Consultas/.test(indicador)) return "🩺";
+  if (/RAPS/.test(indicador)) return "🔗";
+  if (/CAPS/.test(indicador)) return "🧠";
+  if (/Pré-natal/.test(indicador)) return "🤰";
+  if (/Hipertensos/.test(indicador)) return "💓";
+  if (/Diabéticos/.test(indicador)) return "🩸";
+  if (/Crianças/.test(indicador)) return "🧒";
+  if (/Exames Raio-X/.test(indicador)) return "🩻";
+  if (/Exames Ultrassom/.test(indicador)) return "🖥️";
+  if (/Cirurgias Eletivas/.test(indicador)) return "🗓️";
+  if (/Reinternações/.test(indicador)) return "🔁";
+  if (/Mortalidade Materna/.test(indicador)) return "✅";
+  if (/Mortalidade Infantil/.test(indicador)) return "🚼";
+  if (/Partos Normais/.test(indicador)) return "👶";
+  if (/Partos Cesárea/.test(indicador)) return "✂️";
+  return "📊";
+}
+
+// Abas
+const abas = [
+  { chave: "visao-geral", titulo: "Indicadores-Chave de Performance", desc: "Principais métricas do sistema de saúde municipal" },
+  { chave: "primaria", titulo: "Atenção Primária", desc: "Cobertura ESF/ACS, vacinação, consultas, crônicos e puericultura" },
+  { chave: "especializada", titulo: "Atenção Especializada", desc: "Consultas, tempo de espera, exames, cirurgias e reinternações" },
+  { chave: "complexidade", titulo: "Média/Alta Complexidade", desc: "Taxa de ocupação, tempo de internação" },
+  { chave: "redes", titulo: "Redes / Integração", desc: "Rede Psicossocial, CAPS, SAMU, partos, mortalidade materna/infantil" }
+];
+
+let abaAtual = "visao-geral";
+
+// Troca de aba
+document.querySelectorAll('.menu-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    abaAtual = this.getAttribute('data-aba');
+    const infoAba = abas.find(a=>a.chave===abaAtual) || abas[0];
+    document.getElementById('panel-title').textContent = infoAba.titulo;
+    document.getElementById('panel-desc').textContent = infoAba.desc;
+    document.getElementById('categoria-filtro').value = abaAtual==="visao-geral"?"":abaAtual;
+    applyFilters();
+  });
+});
+
+function applyFilters() {
+  const categoria = document.getElementById('categoria-filtro').value || abaAtual;
+  const indicador = document.getElementById('indicador-filtro').value.toLowerCase();
+  const unidade = document.getElementById('unidade-filtro').value;
+  const tipoValor = document.getElementById('tipo-valor-filtro').value;
+  const start = document.getElementById('start-date').value;
+  const end = document.getElementById('end-date').value;
+
+  let filtered = indicadoresHistorico.filter(item => {
+    let catOK = !categoria || item.categoria === categoria;
+    let indOK = !indicador || item.indicador.toLowerCase().includes(indicador);
+    let undOK = !unidade || item.unidade === unidade;
+    let tipoOK = !tipoValor || item.tipoValor === tipoValor;
+    let startOK = !start || item.data >= start;
+    let endOK = !end || item.data <= end;
+    return catOK && indOK && undOK && tipoOK && startOK && endOK;
+  });
+
+  renderCards(filtered);
+  renderChart(filtered);
+}
+
+function renderCards(data) {
+  const cardsDiv = document.getElementById('cards');
+  if (data.length === 0) {
+    cardsDiv.innerHTML = '<p>Nenhum dado para o período e filtros selecionados.</p>';
+    return;
+  }
+  // Agrupa por indicador + unidade. Exibe apenas o mais recente de cada grupo.
+  const grupo = {};
+  data.forEach(d => {
+    const chave = d.indicador + "|" + d.unidade;
+    if (!grupo[chave] || grupo[chave].data < d.data) {
+      grupo[chave] = d;
     }
-  </script></body>
+  });
+  cardsDiv.innerHTML = "";
+  Object.values(grupo).forEach(ultimo => {
+    const cor = corCard(ultimo.indicador);
+    const icone = iconeCard(ultimo.indicador);
+    const valorFormatado = ultimo.tipoValor=="percentual"
+      ? `${ultimo.valor.toLocaleString('pt-BR', {minimumFractionDigits: 1})}%`
+      : ultimo.valor.toLocaleString('pt-BR');
+    cardsDiv.innerHTML += `
+      <div class="indicator-card ${cor}">
+        <div class="icon">${icone}</div>
+        <div class="indicator-info">
+          <div class="indicator-title">${ultimo.indicador}</div>
+          <div class="indicator-value">${valorFormatado}</div>
+          <div class="indicator-sub">${ultimo.unidade} <span style="font-size:12px;color:#999;">${ultimo.data}</span></div>
+          <div class="indicator-trend ${ultimo.trend<0?'negative':''}">
+            <span>${ultimo.trend>0?'+':''}${ultimo.trend}%</span>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function renderChart(data) {
+  const ctx = document.getElementById('historicalChart').getContext('2d');
+  if (data.length === 0) { ctx.clearRect(0,0,400,200); return; }
+  const primeiro = data[0];
+  const serie = data.filter(d => d.indicador === primeiro.indicador && d.unidade === primeiro.unidade)
+    .sort((a,b) => a.data.localeCompare(b.data));
+  const labels = serie.map(i => i.data);
+  const valores = serie.map(i => i.valor);
+  let cor = corCard(primeiro.indicador);
+  let corLinha = cor==="blue"?"#2563eb":cor==="green"?"#22c55e":cor==="yellow"?"#f59e42":cor==="purple"?"#8b5cf6":"#14b8a6";
+  if (window.chartInstance) window.chartInstance.destroy();
+  window.chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: primeiro.indicador+" - "+primeiro.unidade,
+          data: valores,
+          borderColor: corLinha,
+          backgroundColor: corLinha+"22",
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: corLinha
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Data' } },
+        y: { title: { display: true, text: primeiro.tipoValor=="percentual"?"Percentual (%)":"Valor" }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// Inicialização
+applyFilters();
+</script>
+</body>
 </html>
